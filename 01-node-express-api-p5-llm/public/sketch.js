@@ -18,6 +18,10 @@ function draw() {
   text(responseText, 10, 310, 380, 180);
 }
 
+function keyPressed() {
+  if (key === 'Enter') sendMessage();
+}
+
 async function sendMessage() {
   responseText = "thinking...";
   const response = await fetch("/api/ask", {
