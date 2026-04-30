@@ -1,21 +1,26 @@
-let generatedImg, input, button, generateButton;
-let responseText = '';
+let generatedImg, input, button;
+let responseText = "";
 
 function setup() {
   createCanvas(400, 500);
 
-  generateButton = createButton('generate image');
-  generateButton.mousePressed(generateImage);
+  const generateButton = createButton("start");
+  generateButton.mousePressed(async () => {
+    generateButton.remove();
+    responseText = "generating...";
+    const data = await fetch("/api/generate").then(r => r.json());
+    generatedImg = await loadImage("data:image/png;base64," + data.image);
+    responseText = "";
+  });
 
-  input = createInput('');
-  button = createButton('send');
-  button.mousePressed(sendMessage);
-}
+  createButton("What do you want out of life?").mousePressed(() => sendMessage("What do you want out of life?"));
+  createButton("Tell me more about that please").mousePressed(() => sendMessage("Tell me more about that please"));
 
-async function generateImage() {
-  responseText = 'generating image...';
-  generatedImg = await loadImage('/api/generate-image');
-  responseText = '';
+  createElement("br");
+  input = createInput("");
+  button = createButton("send");
+  button.mousePressed(() => sendMessage(input.value()));
+  input.elt.addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(input.value()); });
 }
 
 function draw() {
@@ -24,13 +29,18 @@ function draw() {
   text(responseText, 10, 310, 380, 180);
 }
 
-async function sendMessage() {
-  responseText = 'thinking...';
-  const response = await fetch('/api/ask', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: input.value() })
+async function sendMessage(message) {
+  responseText = "thinking...";
+  const response = await fetch("/api/transform", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
   });
   const data = await response.json();
-  responseText = data.error ?? data.text;
+  if (data.error) {
+    responseText = data.error;
+    return;
+  }
+  responseText = data.text;
+  generatedImg = await loadImage("data:image/png;base64," + data.image);
 }
