@@ -63,7 +63,7 @@ app.post("/api/speak", async (req, res) => {
 
 let cachedSfx = null;
 
-app.get("/api/sfx", async (req, res) => {
+app.get("/api/sfx", async (_, res) => {
   if (!cachedSfx) {
     const audio = await elevenlabs.textToSoundEffects.convert({
       text: "very rapid cat mewows and a siren",
