@@ -1,19 +1,24 @@
-# 01 — Chat with a Cat
+# 01 — Chat with an Animal
 
-A p5.js sketch that fetches a random cat image and lets you chat with a cat-personality LLM (Gemini).
+A p5.js sketch that fetches a random animal image from Pixabay and lets you chat with it via Gemini.
+
+I will give you API Keys, or you are welcome to sign up for your own.
 
 ## Setup
 
 1. `npm install`
 2. Create a `.env` file with:
    ```
-   GEMINI_API_KEY=your_key_here
-   CAT_API_KEY=your_key_here
+   PIXABAY_API_KEY=use_the_key_i_give_you
+   GEMINI_API_KEY=use_the_key_i_give_you
    ```
 3. `npm run dev`
 4. Open http://localhost:3000
 
-## Get API keys
+## Get a Gemini key (optional)
 
-- Gemini: https://aistudio.google.com/apikey
-- Cat API: https://thecatapi.com/
+https://aistudio.google.com/apikey
+
+## Get your own Pixabay key (optional)
+
+https://pixabay.com/api/docs/

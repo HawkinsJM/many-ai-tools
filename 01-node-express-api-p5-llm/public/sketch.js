@@ -1,13 +1,14 @@
 let catImg, input, button;
-let responseText = '';
+let responseText = "";
 
 async function setup() {
   createCanvas(400, 500);
 
-  catImg = await loadImage('/api/cat');
+  const { url } = await fetch("/api/image").then(r => r.json());
+  catImg = await loadImage(url);
 
-  input = createInput('');
-  button = createButton('send');
+  input = createInput("");
+  button = createButton("send");
   button.mousePressed(sendMessage);
 }
 
@@ -18,10 +19,10 @@ function draw() {
 }
 
 async function sendMessage() {
-  responseText = 'thinking...';
-  const response = await fetch('/api/ask', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  responseText = "thinking...";
+  const response = await fetch("/api/ask", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: input.value() })
   });
   const data = await response.json();
