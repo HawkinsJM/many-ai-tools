@@ -9,10 +9,9 @@ const app = express();
 const port = Number(process.env.PORT || 3000);
 const server = app.listen(port);
 
-const CF_BASE = `https://gateway.ai.cloudflare.com/v1/${process.env.CLOUDFLARE_ACCOUNT_ID}/default/workers-ai`;
+const CF_BASE = `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run`;
 const CF_HEADERS = {
   Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
-  "cf-aig-authorization": `Bearer ${process.env.CLOUDFLARE_GATEWAY_TOKEN}`,
   "Content-Type": "application/json"
 };
 
