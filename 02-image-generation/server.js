@@ -16,35 +16,42 @@ app.use(express.static("public"));
 app.use(express.json());
 
 app.get("/api/generate-image", async (req, res) => {
-  const prompt = "a realistic photograph of a frog in a straw hat on the beach";
+  const prompt = "a very small frog with a big strawberry";
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-fast-generate-001:predict?key=${process.env.GEMINI_API_KEY}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 1,
-          responseModalities: ["IMAGE"],
-          imageConfig: {
-            aspectRatio: "4:3"
+        instances: [
+          {
+            prompt,
+            // negativePrompt: text describing what to AVOID in the image (e.g. "blurry, dark, text")
+            negativePrompt: ""
           }
+        ],
+        parameters: {
+          // aspectRatio: "1:1", "3:4", "4:3", "9:16", or "16:9"
+          aspectRatio: "4:3",
+          // personGeneration: "dont_allow", "allow_adult", or "allow_all"
+          personGeneration: "allow_adult",
+          // safetyFilterLevel: "block_low_and_above" (strictest), "block_medium_and_above", "block_only_high" (loosest)
+          safetyFilterLevel: "block_medium_and_above"
         }
       })
     }
   );
   const data = await response.json();
   if (data.error) {
-    console.error("Gemini error:", data.error.message);
+    console.error("Imagen error:", data.error.message);
     return res.status(500).json({ error: data.error.message });
   }
-  const imagePart = data.candidates[0].content.parts.find(p => p.inlineData);
-  if (!imagePart) {
+  const prediction = data.predictions?.[0];
+  if (!prediction?.bytesBase64Encoded) {
     return res.status(500).json({ error: "No image returned" });
   }
-  res.set("Content-Type", imagePart.inlineData.mimeType);
-  res.send(Buffer.from(imagePart.inlineData.data, "base64"));
+  res.set("Content-Type", prediction.mimeType || "image/png");
+  res.send(Buffer.from(prediction.bytesBase64Encoded, "base64"));
 });
 
 app.post("/api/ask", async (req, res) => {
@@ -65,7 +72,7 @@ app.post("/api/ask", async (req, res) => {
         generationConfig: {
           temperature: 1,
           topP: 0.95,
-          maxOutputTokens: 2000
+          maxOutputTokens: 200
         }
       })
     }

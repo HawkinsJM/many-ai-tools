@@ -42,7 +42,7 @@ app.post("/api/ask", async (req, res) => {
         generationConfig: {
           temperature: 1,
           topP: 0.95,
-          maxOutputTokens: 2000
+          maxOutputTokens: 200
         }
       })
     }
