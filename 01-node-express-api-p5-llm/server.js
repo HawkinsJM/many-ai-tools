@@ -59,9 +59,9 @@ app.post("/api/ask", async (req, res) => {
         },
         contents: [{ role: "user", parts: [{ text: req.body.message }] }],
         generationConfig: {
-          temperature: 1,
-          topP: 0.95,
-          maxOutputTokens: 200
+          temperature: 1, // 0–2, controls randomness (0 = predictable, 2 = chaotic)
+          topP: 0.95, // 0–1, limits word choices to most likely options (lower = safer/duller)
+          maxOutputTokens: 200 // max length of the response (~¾ of a word per token)
         }
       })
     }

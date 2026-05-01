@@ -19,7 +19,7 @@ function draw() {
 }
 
 function keyPressed() {
-  if (key === 'Enter') sendMessage();
+  if (key === "Enter") sendMessage();
 }
 
 async function sendMessage() {

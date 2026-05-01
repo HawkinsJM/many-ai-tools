@@ -1,6 +1,6 @@
 # 02 — Image Transform
 
-Generates an image from a fixed prompt (Cloudflare FLUX), then lets you send a message via Gemini (50 tokens) and transforms the image based on Gemini's response (Cloudflare img2img).
+Generates an image from a fixed prompt (Cloudflare FLUX), then lets you send a message via Gemini (100 tokens) and transforms the image based on Gemini's response (Cloudflare img2img).
 
 I will give you API keys, or you are welcome to sign up for your own.
 
