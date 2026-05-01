@@ -53,7 +53,13 @@ app.post("/api/speak", async (req, res) => {
   const audio = await elevenlabs.textToSpeech.convert("hpp4J3VqNfWAUOO0d1Us", {
     text: req.body.text,
     modelId: "eleven_flash_v2_5",
-    outputFormat: "mp3_44100_128"
+    outputFormat: "mp3_44100_128", // mp3_44100_128, wav_48000, opus_48000_192
+    voiceSettings: {
+      stability: 0.5, // 0–1, lower = more expressive, higher = more consistent
+      similarityBoost: 0.75, // 0–1, how closely it matches the original voice
+      style: 0, // 0–1, style exaggeration
+      speed: 1.0 // speech rate (0.7–1.2)
+    }
   });
   res.set("Content-Type", "audio/mpeg");
   const chunks = [];
